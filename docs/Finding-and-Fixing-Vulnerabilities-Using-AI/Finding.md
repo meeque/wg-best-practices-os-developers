@@ -4,11 +4,11 @@
 
 David A. Wheeler and OpenSSF Contributors
 
-This is a guide for software developers and vulnerability researchers on finding and fixing vulnerabilities using artificial intelligence (AI). We intend to create a course using this guide. This material is a joint effort between the OpenSSF Best Practices working group (WG) and the OpenSSF AI/ML WG.
+This is a guide for software developers and vulnerability researchers on finding and fixing vulnerabilities using artificial intelligence (AI) that is the basis of the course [“Finding and Fixing Vulnerabilities Using AI” (LFD126)](https://training.linuxfoundation.org/training/finding-and-fixing-vulnerabilities-using-ai-lfd126/). This material is a joint effort between the OpenSSF Best Practices working group (WG) and the OpenSSF AI/ML WG.
 
 # Introduction
 
-Welcome to “Finding and Fixing Software Vulnerabilities Using AI: A Guide for Developers”. This is a guidance document; we intend to eventually turn this material into an online course (LFD126). You can retrieve its contents as a [markdown file](https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Finding-and-Fixing-Vulnerabilities-Using-AI/Finding.md) and see its [overview](#overview).
+Welcome to “[Finding and Fixing Software Vulnerabilities Using AI: A Guide for Developers](https://best.openssf.org/Finding-and-Fixing-Vulnerabilities-Using-AI/)”. This is a guidance document that is also the basis of our course [“Finding and Fixing Vulnerabilities Using AI” (LFD126)](https://training.linuxfoundation.org/training/finding-and-fixing-vulnerabilities-using-ai-lfd126/). You can retrieve its contents in [markdown](https://best.openssf.org/Finding-and-Fixing-Vulnerabilities-Using-AI/Finding.md), [PDF](https://best.openssf.org/Finding-and-Fixing-Vulnerabilities-Using-AI/Finding.pdf), and [EPUB](https://best.openssf.org/Finding-and-Fixing-Vulnerabilities-Using-AI/Finding.epub) formats. You can also see its [overview](#overview).
 
 ## Scope of this material
 
@@ -21,7 +21,7 @@ It includes the process of finding, validating, and generating fixes, as well as
 
 We don’t focus on any one *specific* system to do this. Many systems can help with this, more are being released, using multiple systems can be helpful, and the industry is rapidly changing. We instead focus on general principles that we believe are more timeless and will help you regardless of the systems you use to find and fix vulnerabilities. Once you understand the general issues, you’ll be more effective when using any particular system.
 
-For a more general introduction on applying AI/ML to software development and security, see our course *Secure AI/ML-Driven Software Development (LFEL1012)* at [https\://training.linuxfoundation.org/express-learning/secure-ai-ml-driven-software-development-lfel1012/](https://training.linuxfoundation.org/express-learning/secure-ai-ml-driven-software-development-lfel1012/).
+For a more general introduction on applying AI/ML to software development and security, see our course *Secure AI/ML-Driven Software Development (LFEL1012)* at [https\://training.linuxfoundation.org/express-learning/secure-ai-ml-driven-software-development-lfel1012/](https://training.linuxfoundation.org/express-learning/secure-ai-ml-driven-software-development-lfel1012/). More general information about developing secure software in general is available in our course [*Developing Secure Software (LFD121)*](https://training.linuxfoundation.org/training/developing-secure-software-lfd121/).
 
 Please note that this material does NOT focus on the following topics:
 
@@ -115,7 +115,7 @@ In short, the “normal” security tasks are *still* important with AI \[[Oshun
 
 ![Woman directs robot to build a wall while applying security principles](images/woman-directs-robot-build-wall-while.jpg){width=394 height=215}
 
-## Good news: Long-term potential for eliminating nearly all vulnerabilities
+## Good news: A Path to Near-Zero Vulnerabilities
 
 In the longer term, there is *great* news for defenders. As Bobby Holley of Mozilla put it, “**Defenders finally have a chance to win, decisively**…. **the defects are finite, and we are entering a world where we can finally find them all**” \[[Holley2026](https://blog.mozilla.org/en/privacy-security/ai-security-zero-day-vulnerabilities/)\].
 
@@ -175,7 +175,17 @@ We conclude with a [call to action](#call-to-action), [acknowledgements](#acknow
 
 # AI concepts
 
+## Overview & Learning Objectives
+
 Before we discuss using AI to find and fix vulnerabilities, we need to first understand some basic AI concepts. This section will focus only on the basics of current AI necessary for our topic.
+
+By the end of this section, you should be able to:
+
+* Define core AI concepts including LLMs, AI agents, agent harnesses, and agent skills.
+* Understand AI capabilities and limitations, including limited context windows, unsound outputs, and susceptibility to prompt injection.
+* Compare local versus external hosting and evaluate open weights, open source, and closed models.
+* Examine specialized small language models, safety guardrails, and the history of Cyber Reasoning Systems (CRSs).
+* Identify key frontier labs, agent frameworks, and security organizations.
 
 ## Basic AI terminology
 
@@ -213,9 +223,10 @@ A) Incorrect. Frontier models are machine learning models built on neural networ
 B) Incorrect. Where a model runs doesn’t make it a frontier model; some powerful models are only available as external services.\
 C) Incorrect. Models are trained, and they’re sized by their number of parameters; larger models tend to be better.\
 D) Correct. A frontier model is one that’s among the best currently available. The term is about how capable the model is now, not how it works or where it runs.\
-ENDQUIZ\
+ENDQUIZ
+
 QUIZ\
-Q1. What is the key difference between an “AI agent” and an “AI chatbot”?
+Q2. What is the key difference between an “AI agent” and an “AI chatbot”?
 
 A) An agent uses deep learning, while a chatbot uses only hand-written rules\
 B) An AI agent can execute multi-step actions using external tools to affect its external environment; a chatbot typically can’t affect an external environment\
@@ -245,7 +256,7 @@ However, they also have key weaknesses that impact finding and fixing software v
 * *Injection vulnerability*. LLMs have no built-in fundamental way to distinguish between different types of input. User commands, malicious commands embedded in a web page, and misleading source code comments are all inputs. This is especially important when an AI agent analyzes a software repository or external documentation. Source comments, documentation, issue text, generated files, dependency metadata, and other repository content may be attacker-controlled or simply incorrect. Treat such content as data to analyze, not as authority to redefine the agent’s task, grant additional permissions, expose credentials, or enable additional tools or network access. Instructions obtained from untrusted content should not be allowed to silently cross an authorization boundary \[[OWASP-LLM01](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)\].
 
 QUIZ\
-Q1. Why does the material describe an LLM’s analysis as “unsound”?
+Q3. Why does the material describe an LLM’s analysis as “unsound”?
 
 A) It always produces code that fails to compile\
 B) It requires more memory than any traditional static analysis tool, causing crashes if there’s insufficient memory\
@@ -263,7 +274,7 @@ D) Incorrect. “Unsound” isn’t about how many files an LLM processes. The a
 ENDQUIZ
 
 QUIZ\
-Q1. Why does an LLM’s limited context window matter when analyzing a large codebase?
+Q4. Why does an LLM’s limited context window matter when analyzing a large codebase?
 
 A) It restricts how much input the LLM can effectively focus on, with attention favoring the beginning and end of that input\
 B) It prevents the LLM from ever being trained on security-related data\
@@ -483,7 +494,8 @@ Answer: A
 Feedback:
 
 A) Correct. Repository content may be attacker-controlled or simply incorrect. A harness may label that content as data, but the LLM itself doesn’t reliably enforce that distinction, so an agent may follow instructions embedded in it. Treat that content as data to analyze, never as authority to redefine the agent’s task, grant permissions, expose credentials, or enable more tools or network access. Telling the agent to ignore such instructions isn’t enough; enforce those limits outside the AI, e.g., with a sandbox, locked-down network access, and only the credentials the agent’s role needs. This also applies to content in your own project that others can write, such as issue text and pull requests.\
-B) Incorrect. The material warns that comments, documentation, issue text, and other repository content may be attacker-controlled or simply incorrect, whoever appears to have written them.\
+B) Incorrect. The material warns that comments, documentation, issue text, and other repository content may be attacker-controlled or simply incorrect, regardless of who\
+ appears to have written them.\
 C) Incorrect. Being on the main branch doesn’t always make content trustworthy. Instructions obtained from untrusted content shouldn’t be allowed to silently cross an authorization boundary.\
 D) Incorrect. Well-written text can still contain malicious instructions. The problem is that an LLM has no built-in way to reliably isolate instructions from data, so limit what the agent can do rather than relying on it to filter instructions.\
 ENDQUIZ
@@ -566,7 +578,7 @@ ENDQUIZ
 
 # Decide on approaches
 
-There are many ways to use AI to find and fix vulnerabilities, so the first step is to decide on the overall approach. In this chapter we’ll cover some principles: [don’t ignore AI](#do-not-ignore-ai), [don’t wait for the best models](#do-not-wait-for-access-to-the-best-ai-models), [do simple things first](#do-simple-things-first), and [don’t presume AI can fix everything](#do-not-presume-ai-can-correctly-fix-all-vulnerabilities). We’ll then cover [why](#why-ai-tends-to-be-more-effective-if-guided-by-processes) and [how](#how-to-apply-processes-for-using-ai-to-find-and-fix-vulnerabilities) to guide AI with processes, some [example tools and services](#sample-services-and-tools), and why you’ll need to [run AI more than once](#run-ai-multiple-times).
+There are many ways to use AI to find and fix vulnerabilities, so the first step is to decide on the overall approach. In this chapter we’ll cover some principles: [don’t ignore AI](#do-not-ignore-ai), [don’t wait for the best models](#dont-let-model-access-hold-you-back), [do simple things first](#do-simple-things-first), and [don’t presume AI can fix everything](#do-not-presume-ai-can-correctly-fix-all-vulnerabilities). We’ll then cover [why](#getting-better-results-with-structured-workflows) and [how](#how-to-apply-processes-for-using-ai-to-find-and-fix-vulnerabilities) to guide AI with processes, some [example tools and services](#sample-services-and-tools), and why you’ll need to [run AI more than once](#run-ai-multiple-times).
 
 ## Do not ignore AI
 
@@ -606,7 +618,7 @@ C) Incorrect. The material doesn’t connect report policies to licenses. Its co
 D) Incorrect. The material doesn’t connect report policies to CVE identifiers. The harm it describes falls on the software’s users, since valid reports get rejected.\
 ENDQUIZ
 
-## Do not wait for access to the best AI models
+## Don't Let Model Access Hold You Back
 
 Do **not** wait until you have access to the most advanced restricted-access AI models. Instead:
 
@@ -745,7 +757,7 @@ C) Correct. AI fixes may fix a special case but not the full vulnerability, intr
 D) Incorrect. That goes too far. AI can help generate many fixes, especially localized ones once it’s told what needs fixing, and it can sometimes fix complex vulnerabilities too. The point is to review its fixes carefully.\
 ENDQUIZ
 
-## Why AI tends to be more effective if guided by processes
+## Getting Better Results with Structured Workflows
 
 You *can* find and fix some vulnerabilities with simple prompts, as noted above. In particular, more powerful AI models can sometimes identify and fix vulnerabilities without additional help or specialized processes. However, if your goal is thoroughness, many analysts report that *guiding* an AI makes the AI much more effective at finding and fixing vulnerabilities.
 
@@ -762,12 +774,12 @@ Derek Zimmer \[Zimmer2026\] believes that one reason for this is that it’s eas
 3. *Splitting the chain across agents produces better reasoning*. Asking "Is this code buggy?" and "Can an attacker actually reach this bug from outside the system?" are two different questions, and the model is better at each one when you ask them separately, because each question is narrower than the combined version.
 4. *Parallel, narrow tasks beat a single exhaustive agent*. Coverage improves when many agents work on tightly scoped questions and we deduplicate the results afterward, rather than asking one agent to be exhaustive.”
 
-At the time of writing, exactly *how* to best guide AI is under evaluation. Different groups use different approaches, and it’s likely that some approaches are better suited to certain types of vulnerabilities. We’ll further discuss approaches later, but as an example, here’s the approach described by \[[Bourzikas2026](https://blog.cloudflare.com/cyber-frontier-models/)\]:
+As of November 2026, exactly *how* to best guide AI is under evaluation. Different groups use different approaches, and it’s likely that some approaches are better suited to certain types of vulnerabilities. We’ll further discuss approaches later, but as an example, here’s the approach described by \[[Bourzikas2026](https://blog.cloudflare.com/cyber-frontier-models/)\]:
 
 1. *Recon*: An agent reads the repository from the top down, fans out to subagents responsible for each subsystem, and produces an architecture document covering build commands, trust boundaries, entry points, and likely attack surface. It also generates the initial task queue for the next stage. Gives every downstream agent shared context. Cuts the wander problem.
 2. *Hunt*: Each task is one attack class paired with a scope hint. Hunters (the agents that actually look for bugs) run concurrently, typically around fifty at once, each fanning out to a handful of exploration subagents. Each hunter has access to tools that compile and run proof-of-concept code in a per-task scratch directory. This is where most of the work happens. Many narrow tasks in parallel, not one exhaustive agent.
 3. *Validate*: An independent agent re-reads the code and tries to disprove the original finding. It uses a different prompt and cannot emit new findings of its own. Catches a meaningful fraction of the noise the hunter wouldn't catch when reviewing its own work.
-4. *Gapfill*: Hunters flag areas they touched but didn't cover thoroughly. Those areas get re-queued for another pass. Counteracts the model's tendency to drift toward attack classes it has already had success with.
+4. *Gapfill*: Hunters flag areas they touched but didn't cover thoroughly. Those areas get re-queued for another pass. This counters the model's tendency to drift toward attack classes it has already succeeded with.
 5. *Dedupe*: Findings that share the same root cause collapse into a single record. Variant analysis is a feature, not a way to inflate the queue with duplicates.
 6. *Trace*: For each confirmed finding in a shared library, a tracer agent fans out (one instance per consumer repository), uses a cross-repo symbol index, and decides whether attacker-controlled input actually reaches the bug from outside the system. Turns "there is a flaw" into "there is a reachable vulnerability." This is the stage that matters most.
 7. *Feedback*: Reachable traces become new hunt tasks in the consumer repositories where the bug is actually exposed. Closes the loop. The pipeline gets better as it runs.
@@ -969,16 +981,16 @@ OSS-CRS is already capable. “Using OSS-CRS, Team Atlanta discovered twenty-fiv
 
 Here is a set of short videos demonstrating finding bugs using OSS-CRS combined with LibFuzzer:
 
-1. 🎬 [Set up OSS-CRS](https://drive.google.com/file/d/1vv00WXeZusyi2lu-uT2dOiG6KkwMAt4C/view?usp=sharing)
-2. 🎬 [Set Variables for CRS Libfuzzer](https://drive.google.com/file/d/1A9f-PONiA0nJifLkp5dNORxNNEITwCI-/view?usp=sharing)
-3. 🎬 [Prepare the CRS Libfuzzer](https://drive.google.com/file/d/1cwD0DAkMp_XV8J-AdLQZTI3gmRrhxiV-/view?usp=sharing)
-4. 🎬 [Build a target for the Libfuzzer](https://drive.google.com/file/d/19TdoLfwjFEmpOcItrwGHkVyMPwhtFV7y/view?usp=sharing)
-5. 🎬 [Run the CRS Libfuzzer](https://drive.google.com/file/d/1Yt630PBO1B78JCbiMVXBeu_Qq3FVF9N8/view?usp=sharing)
-6. 🎬 L[ibfuzzer outputs: seeds and Proof of Vulnerabilities](https://drive.google.com/file/d/1ztRPyF443w35dzEePWuwjKq_Jz29VfPj/view?usp=sharing)
+1. 🎬 [Set up OSS-CRS](https://github.com/ossf/oss-crs/pull/535/changes#diff-3f51f3964296440405c41288425aa27e66ff9c5e074b6be6b3efb4339107a691)
+2. 🎬 [Set Variables for CRS Libfuzzer](https://github.com/ossf/oss-crs/pull/535/changes#diff-be5b8d43f75185fcd0db74af9b76d6a65990458704c9f2fc5eb9423c2a8ef462)
+3. 🎬 [Prepare the CRS Libfuzzer](https://github.com/ossf/oss-crs/pull/535/changes#diff-49210f1065c444dc2d269d26946927c0033a914b033e20c56b6e1f187a68ad4a)
+4. 🎬 [Build a target for the Libfuzzer](https://github.com/ossf/oss-crs/pull/535/changes#diff-a903c9889482235031c3685388900ef199444bc2b70eb7c37950a3df6d2b589c)
+5. 🎬 [Run the CRS Libfuzzer](https://github.com/ossf/oss-crs/pull/535/changes#diff-4013f6fc4a8b920b648f84524d087fd9781396d9ffb473464ec6d189ba973640)
+6. 🎬 L[ibfuzzer outputs: seeds and Proof of Vulnerabilities](https://github.com/ossf/oss-crs/pull/535/changes#diff-f9d84d5e991b1216b8044023c31472a4a956e3c13806360ecfac66c07e16a471)
 
 Here’s a video showing using OSS-CRS to create a proposed patch:
 
-🎬 [Running a patching CRS](https://drive.google.com/file/d/1kC4rsM3cnX7wf55_QqWl3k0EZbRvfbqA/view?usp=sharing)
+🎬 [Running a patching CRS](https://github.com/ossf/oss-crs/pull/535/changes#diff-245fa6553c96a103bf702aacb3dc96f09ccf8ef6f060c022108d835f1a5b7c64)
 
 For more information on OSS-CRS, see: [https\://openssf.org/projects/oss-crs/](https://openssf.org/projects/oss-crs/)
 
@@ -1222,7 +1234,7 @@ Unsurprisingly, “AI (and external contributors) are more successful if the pro
 
 Having a threat model for a system’s deployed environment is *important* when using AI:
 
-* One report stated that an AI model “performed best on systems with well-documented threat models, system design docs, requirements, and constraints. When the threat model was well-defined, the model's findings were exploitable 90 percent of the time.” In addition, “The most common cause of false positives is that the model lacks a good understanding of \[the\] trust boundaries.” \[[Yan2026](https://claude.com/blog/using-llms-to-secure-source-code)\].
+* One collection of best practices, “Using LLMs to secure source code”, stated that an AI model “performed best on systems with well-documented threat models, system design docs, requirements, and constraints. When the threat model was well-defined, the model's findings were exploitable 90 percent of the time.” In addition, “The most common cause of false positives is that the model lacks a good understanding of \[the\] trust boundaries.” \[[Yan2026](https://claude.com/blog/using-llms-to-secure-source-code)\].
 * A Mythos Preview user reported that it was valuable, but it “needs precise prompts, explicit threat models, and validation infrastructure to turn strong reasoning into reliable security outcomes” \[[Ziegler2026](https://xbow.com/blog/mythos-offensive-security-xbow-evaluation)\].
 * If the AI is not given enough information on the specific context and structure of your system’s environment, its recommendations may fail to align with requirements, including regulatory requirements \[[Kholoosi2025](https://arxiv.org/abs/2512.18261v2)\].
 
@@ -1245,7 +1257,7 @@ When creating or updating a threat model for a world with AI, consider the follo
 8. Implement resiliency and rapid recovery \[[CrowdStrike2026-FiveSteps](https://www.crowdstrike.com/en-us/resources/white-papers/five-steps-for-frontier-ai-security-readiness/)\]
 
 QUIZ\
-Q1. Per the report the material cites, what happened when an AI model analyzed systems with well-defined threat models?
+Q1. Per the collection of best practices “Using LLMs to secure source code”,  what happened when an AI model analyzed systems with well-defined threat models?
 
 A) It found fewer vulnerabilities overall, since the threat model told it to skip most of the code\
 B) Its findings were much more often real, exploitable vulnerabilities instead of false positives\
@@ -1466,7 +1478,7 @@ The CI/CD process needs to be high quality to reduce the likelihood of breaking 
   * Don’t just output “test failed”; report which test(s) failed, the expected results, and the actual results. This is necessary to speed response
 * Use linters to detect possible defects (some of which may be vulnerabilities)
 * Include tools to detect likely vulnerabilities, such as static application security testing (SAST) tools
-* Take steps to minimize false positives, and especially work to counter *repeat* false positives. E.g., mark confirmed false positives in the source code, such as with suppression comments, so tools don’t report them again
+* Take steps to minimize false positives, and especially work to counter *repeat* false positives. E.g., mark confirmed false positives in the source code, such as with suppression comments, so tools don’t report them again. AI can help triage these warnings and draft each suppression with a comment justifying it, but have a human review each suppression
 
 *Speed matters* in these processes. It doesn’t matter if a vulnerability is known; what matters is deploying the fix before an attacker exploits it:
 
@@ -1691,10 +1703,10 @@ Separating identifying findings from validating them makes finding vulnerabiliti
 It’s best to help the AI identify findings. There are many ways to help identify findings when using AI:
 
 1. *In general, give the AI tools*. That includes tools for searching and reading code, security tools, and so on. Consider asking the AI what tools it might need and make them available \[[Yan2026](https://claude.com/blog/using-llms-to-secure-source-code)\]. Provide the AI with basic tools (e.g., scripting languages like Python) so it can write its own tools to aid in finding (just like a human might).
-2. *In particular, use traditional non-AI tools that search for potential vulnerabilities*. These include various static analysis tools (examining the source code or binary) and dynamic analysis tools (including fuzzers and web application scanners).
-   1. Integrating these traditional tools with AI can be powerful. “Agentic AI is already beginning to help scale vulnerability discovery by leveraging traditional tooling” \[[Rohlf2025](https://cset.georgetown.edu/article/ai-and-the-software-vulnerability-lifecycle/)\].
-   2. Many projects already have a backlog of unreviewed static analysis warnings, and AI agents can help triage them. A 2026 study found that LLM-based agents reduced “an initial \[false positive (FP)\] detection rate of over 92% on the OWASP Benchmark to as low as 6.3% in the best configuration”. Be careful, however: that same configuration wrongly dismissed 22.25% of the real vulnerabilities, with miss rates over 50% in some categories such as weak cryptography, and the authors conclude that FP suppression “should not be fully automated” \[[Xiong2026](https://arxiv.org/abs/2601.22952)\].
-   3. Use AI to prioritize such warnings, not to silently discard them.
+2. *Use traditional non-AI vulnerability-finding tools, and use AI to help triage their output*. Traditional non-AI tools include various traditional static analysis tools (examining the source code or binary) and dynamic analysis tools (including fuzzers and web application scanners). These tools are often relatively fast. Even more importantly, many reliably do the same thing every time, unlike most modern AI. However, traditional tool warnings may be false positives, and many projects already have a backlog of unreviewed analysis warnings. The good news is that integrating these traditional tools with AI can be powerful. “Agentic AI is already beginning to help scale vulnerability discovery by leveraging traditional tooling” \[[Rohlf2025](https://cset.georgetown.edu/article/ai-and-the-software-vulnerability-lifecycle/)\]. In particular, AI agents can help triage their reports:
+   1. Treat each non-AI tool warning as a finding to validate.
+   2. AI can flag likely false positives. A 2026 study found that LLM-based agents reduced “an initial \[false positive (FP)\] detection rate of over 92% on the OWASP Benchmark to as low as 6.3% in the best configuration”. This can help you prioritize. Be careful, however: that same configuration wrongly dismissed 22.25% of the real vulnerabilities, with miss rates over 50% in some categories such as weak cryptography, and the authors conclude that FP suppression “should not be fully automated” \[[Xiong2026](https://arxiv.org/abs/2601.22952)\].
+   3. Use AI to prioritize which warnings to analyze first, not to silently discard them. Confirm a report is a false positive (e.g., with a human) before you suppress a warning.
 3. *Prioritize especially concerning code*. One list suggests code that parses untrusted input, enforces authentication or authorization, or is reachable from the internet \[[Cycode2026](https://cycode.com/blog/claude-mythos-security-readiness/), quoting Anthropic\]. The Mozilla Firefox project reports that their “scanning is largely focused on specific areas of the code (files, functions) where we instruct the system to look, based on a mix of human judgment and automated signals.” \[[Grinstead2026-05](https://hacks.mozilla.org/2026/05/behind-the-scenes-hardening-firefox/)\]
 4. *To find security vulnerabilities, include a search for language-specific issues, insecure coding practices, and improper handling of parameters, variables, and data flows*. For each programming language used in the project, apply checks for language- and framework-specific vulnerabilities. Trace parameters and variables, and their usage throughout the code, to detect unsafe patterns, misuse, or inconsistencies \[[Rogers2025](https://joshua.hu/llm-engineer-review-sast-security-ai-tools-pentesters)\].
 5. *Have the model examine and cluster past bugs or at least past vulnerabilities*. For vulnerabilities (as determined by your threat model), have it list the relevant vulnerability classes. Then have the AI system determine (for every fix) if the fix was complete and if it applied everywhere else. Look for similar problems. \[[Yan2026](https://claude.com/blog/using-llms-to-secure-source-code)\] reported that one team did this and found three exploitable issues in an hour, saying “‘What have people exploited in the past’ is sometimes a much easier cheat-code towards success than ‘find me vulnerabilities in this codebase.’”
@@ -2253,7 +2265,7 @@ So you need to repeatedly apply AI systems, especially improved ones, to find vu
 
 The good news is that improved hardening and fixing vulnerabilities will eventually eliminate all “easy vulnerabilities” and make the system increasingly difficult to attack. Software is finite, and so are defects. Take heart: as it gets harder for software developers to find vulnerabilities, it also gets harder for attackers to find them.
 
-In practice, software changes over time. Deterministic checks, including those [created from earlier findings](#turn-findings-into-durable-checks), should run on every change. An AI system should also analyze each proposed change (pull request or merge request) toidentify vulnerabilities *before* a change is accepted.
+In practice, software changes over time. Deterministic checks, including those [created from earlier findings](#turn-findings-into-durable-checks), should run on every change. An AI system should also analyze each proposed change (pull request or merge request) to identify vulnerabilities *before* a change is accepted.
 
 ![A robot and human repeatedly wash a car to clean out a car, the pass count is 5 and the car is sparkling with dirty bugs draining away](images/robot-human-repeatedly-wash-car-clean.jpg){width=459 height=250}
 
